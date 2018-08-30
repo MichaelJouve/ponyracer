@@ -8,6 +8,7 @@ import { RaceModel } from '../../models/race.model';
   styleUrls: ['./finished-races.component.css']
 })
 export class FinishedRacesComponent {
+  
   races: RaceModel[];
 
   constructor(route: ActivatedRoute) {

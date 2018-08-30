@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RaceService } from '../race.service';
+
 import { PonyModel } from '../models/pony.model';
 import { RaceModel } from '../models/race.model';
 
@@ -11,14 +12,13 @@ import { RaceModel } from '../models/race.model';
 })
 export class BetComponent implements OnInit {
 
-raceModel: RaceModel;
-betFailed:boolean = false;
+  raceModel: RaceModel;
+  betFailed = false;
 
   constructor(private route: ActivatedRoute, private raceService: RaceService) { }
 
   ngOnInit() {
-    const raceId = +this.route.snapshot.paramMap.get('raceId');
-    this.raceService.get(raceId).subscribe(race => this.raceModel = race);
+    this.raceModel = this.route.snapshot.data['race'];
   }
 
   betOnPony(pony: PonyModel) {
@@ -34,6 +34,4 @@ betFailed:boolean = false;
   isPonySelected(pony: PonyModel) {
     return pony.id === this.raceModel.betPonyId;
   }
-
-  
 }
