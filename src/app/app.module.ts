@@ -17,6 +17,9 @@ import { LoginComponent } from './login/login.component';
 import { JwtInterceptorService } from './jwt-interceptor.service';
 import { BetComponent } from './bet/bet.component';
 import { LiveComponent } from './live/live.component';
+import { PendingRacesComponent } from './races/pending-races/pending-races.component';
+import { FinishedRacesComponent } from './races/finished-races/finished-races.component';
+import { RacesResolverService } from './races-resolver.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { LiveComponent } from './live/live.component';
     RegisterComponent,
     LoginComponent,
     BetComponent,
-    LiveComponent
+    LiveComponent,
+    PendingRacesComponent,
+    FinishedRacesComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +45,8 @@ import { LiveComponent } from './live/live.component';
     RouterModule.forRoot(ROUTES)
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useExisting: JwtInterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useExisting: JwtInterceptorService, multi: true },
+    RacesResolverService
   ],
   bootstrap: [AppComponent]
 })

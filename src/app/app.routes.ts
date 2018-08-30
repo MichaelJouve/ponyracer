@@ -6,18 +6,41 @@ import { LoginComponent } from './login/login.component';
 import { Routes } from '@angular/router';
 import { BetComponent } from './bet/bet.component';
 import { LiveComponent } from './live/live.component';
+import { LoggedInGuard } from './logged-in.guard';
+import { PendingRacesComponent } from './races/pending-races/pending-races.component';
+import { FinishedRacesComponent } from './races/finished-races/finished-races.component';
+import { RacesResolverService } from './races-resolver.service';
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'races', component: RacesComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
   {
     path: 'races',
+    canActivate: [LoggedInGuard],
     children: [
+      {
+        path: '',
+        component: RacesComponent,
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'pending' },
+
+          {
+            path: 'pending', component: PendingRacesComponent,
+            resolve: {
+              races: RacesResolverService
+            }
+          },
+          {
+            path: 'finished', component: FinishedRacesComponent,
+            resolve: {
+              races: RacesResolverService
+            }
+          }
+        ]
+      },
       { path: ':raceId', component: BetComponent },
       { path: 'live/:raceId', component: LiveComponent },
-      { path: '', component: RacesComponent }
     ]
-  }
+  },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
 ];

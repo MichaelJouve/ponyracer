@@ -10,21 +10,30 @@ import { PonyModel } from '../models/pony.model';
 export class PonyComponent implements OnInit {
 
   @Input() ponyModel: PonyModel;
-  @Output() ponyClicked = new EventEmitter<PonyModel>();
   @Input() isRunning:boolean;
+  @Input() isBoosted: boolean;
+  @Output() ponyClicked = new EventEmitter<PonyModel>();
+
 
   constructor() {}
 
   ngOnInit() {
   }
 
-  getPonyImageUrl(): String {
-    if (this.isRunning) {
-      return `assets/images/pony-${this.ponyModel.color.toLowerCase()}-running.gif`;
-    } else {
-      return `assets/images/pony-${this.ponyModel.color.toLowerCase()}.gif`;
+  
+    getPonyImageUrl() {
+      return `assets/images/pony-${this.ponyModel.color.toLowerCase()}${ this.isBoosted ? '-rainbow' : this.isRunning ? '-running' : ''}.gif`;
     }
-  }
+   
+    // idem to :
+    // if ( this.isRunning ) {
+    //   return `assets/images/pony-${this.ponyModel.color.toLowerCase()}-running.gif`;
+    // } else if (this.isRunning && this.isBoosted) {
+    //   return `assets/images/pony-${this.ponyModel.color.toLowerCase()}-rainbow.gif`;
+    // } else {
+    //   return `assets/images/pony-${this.ponyModel.color.toLowerCase()}.gif`;
+    // }
+  
 
   clicked() {
     this.ponyClicked.emit(this.ponyModel);
