@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 
@@ -12,10 +12,9 @@ import { RaceModel } from '../models/race.model';
 import { PonyModel } from '../models/pony.model';
 
 describe('BetComponent', () => {
-  const fakeRaceService = jasmine.createSpyObj('RaceService', ['get', 'bet', 'cancelBet']);
+  const fakeRaceService = jasmine.createSpyObj('RaceService', ['bet', 'cancelBet']);
   const race = { id: 1, name: 'Paris' } as RaceModel;
-  fakeRaceService.get.and.returnValue(of(race));
-  const fakeActivatedRoute = { snapshot: { paramMap: convertToParamMap({ raceId: 1 }) } };
+  const fakeActivatedRoute = { snapshot: { data: { race } } };
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
@@ -126,11 +125,9 @@ describe('BetComponent', () => {
     const component = fixture.componentInstance;
     expect(component.raceModel).toBeUndefined();
 
-    fakeActivatedRoute.snapshot.paramMap = convertToParamMap({ raceId: 1 });
     component.ngOnInit();
 
-    expect(component.raceModel).toBe(race, '`ngOnInit` should initialize the `raceModel`');
-    expect(fakeRaceService.get).toHaveBeenCalledWith(1);
+    expect(component.raceModel).toEqual(race, '`ngOnInit` should initialize the `raceModel`');
   });
 
   it('should display an error message if bet failed', () => {
@@ -183,5 +180,19 @@ describe('BetComponent', () => {
     expect(fakeRaceService.cancelBet).toHaveBeenCalledWith(2);
     expect(component.raceModel.betPonyId).toBe(1);
     expect(component.betFailed).toBe(true);
+  });
+
+  it('should display a link to go to live', () => {
+    const fixture = TestBed.createComponent(BetComponent);
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+    component.raceModel = { id: 2, betPonyId: 1, name: 'Lyon', ponies: [], startInstant: '2016-02-18T08:02:00Z' };
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement;
+    const button = element.querySelector('a[href="/races/2/live"]');
+    expect(button).not.toBeNull('You should have a link to go to the live with an href `/races/id/live`');
+    expect(button.textContent).toContain('Watch live!');
   });
 });

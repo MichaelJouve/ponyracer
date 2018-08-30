@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription, interval, EMPTY } from 'rxjs';
-import { bufferToggle, catchError, filter, groupBy, map, mergeMap, switchMap, tap, throttleTime } from 'rxjs/operators';
+import { bufferToggle, catchError, filter, groupBy, map, mergeMap, switchMap, throttleTime } from 'rxjs/operators';
 
 import { RaceService } from '../race.service';
 import { RaceModel } from '../models/race.model';
