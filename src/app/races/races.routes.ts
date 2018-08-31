@@ -13,7 +13,6 @@ export const RACES_ROUTES: Routes = [
         component: RacesComponent,
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'pending' },
-
             {
                 path: 'pending', component: PendingRacesComponent,
                 resolve: {
@@ -40,6 +39,4 @@ export const RACES_ROUTES: Routes = [
             race: RaceResolverService
         }
     },
-
-
 ]
